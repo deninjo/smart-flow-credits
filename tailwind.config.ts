@@ -52,6 +52,27 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// AquaSmart custom colors
+				water: {
+					DEFAULT: 'hsl(var(--water-primary))',
+					secondary: 'hsl(var(--water-secondary))',
+					light: 'hsl(var(--water-light))'
+				},
+				credit: {
+					DEFAULT: 'hsl(var(--credit-primary))',
+					secondary: 'hsl(var(--credit-secondary))',
+					light: 'hsl(var(--credit-light))'
+				},
+				warning: {
+					DEFAULT: 'hsl(var(--warning-primary))',
+					secondary: 'hsl(var(--warning-secondary))',
+					light: 'hsl(var(--warning-light))'
+				},
+				danger: {
+					DEFAULT: 'hsl(var(--danger-primary))',
+					secondary: 'hsl(var(--danger-secondary))',
+					light: 'hsl(var(--danger-light))'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -67,6 +88,16 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			backgroundImage: {
+				'gradient-water': 'var(--gradient-water)',
+				'gradient-credit': 'var(--gradient-credit)',
+				'gradient-hero': 'var(--gradient-hero)'
+			},
+			boxShadow: {
+				'water': 'var(--shadow-water)',
+				'credit': 'var(--shadow-credit)',
+				'card': 'var(--shadow-card)'
 			},
 			keyframes: {
 				'accordion-down': {

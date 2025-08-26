@@ -18,6 +18,12 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        // AquaSmart variants
+        water: "bg-gradient-water text-white hover:shadow-water shadow-lg transition-all duration-300",
+        credit: "bg-gradient-credit text-white hover:shadow-credit shadow-lg transition-all duration-300",
+        warning: "bg-warning text-white hover:bg-warning-secondary transition-colors",
+        "water-outline": "border-2 border-water text-water bg-water-light hover:bg-water hover:text-white transition-all",
+        "credit-outline": "border-2 border-credit text-credit bg-credit-light hover:bg-credit hover:text-white transition-all",
       },
       size: {
         default: "h-10 px-4 py-2",

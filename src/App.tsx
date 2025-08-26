@@ -5,6 +5,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import { Auth } from "./pages/Auth";
+import { Dashboard } from "./pages/Dashboard";
+import { Purchase } from "./pages/Purchase";
+import { AdminDashboard } from "./pages/AdminDashboard";
+import { Layout } from "./components/Layout";
 
 const queryClient = new QueryClient();
 
@@ -16,6 +21,21 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/auth" element={<Auth />} />
+          
+          {/* Customer Routes */}
+          <Route path="/dashboard" element={<Layout userType="customer"><Dashboard /></Layout>} />
+          <Route path="/purchase" element={<Layout userType="customer"><Purchase /></Layout>} />
+          <Route path="/alerts" element={<Layout userType="customer"><div>Alerts Page (Coming Soon)</div></Layout>} />
+          <Route path="/settings" element={<Layout userType="customer"><div>Settings Page (Coming Soon)</div></Layout>} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={<Layout userType="admin"><AdminDashboard /></Layout>} />
+          <Route path="/admin/meters" element={<Layout userType="admin"><div>Meters Management (Coming Soon)</div></Layout>} />
+          <Route path="/admin/transactions" element={<Layout userType="admin"><div>Transactions (Coming Soon)</div></Layout>} />
+          <Route path="/admin/alerts" element={<Layout userType="admin"><div>System Alerts (Coming Soon)</div></Layout>} />
+          <Route path="/admin/settings" element={<Layout userType="admin"><div>Admin Settings (Coming Soon)</div></Layout>} />
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
