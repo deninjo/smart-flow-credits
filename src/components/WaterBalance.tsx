@@ -24,16 +24,16 @@ export const WaterBalance = ({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-bold">KSh {currentBalance.toLocaleString()}</div>
+          <div className="text-3xl font-bold">{currentUnits.toLocaleString()}L</div>
           <p className="text-white/80 text-sm mt-1">
-            {currentUnits.toLocaleString()} liters remaining
+            Available water units
           </p>
         </CardContent>
       </Card>
 
       <Card className="bg-gradient-credit text-white border-0 shadow-credit">
         <CardHeader className="pb-2">
-          <CardTitle className="text-white/90">Last Month Usage</CardTitle>
+          <CardTitle className="text-white/90">This Month Usage</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-3xl font-bold">{lastMonthUsage.toLocaleString()}L</div>

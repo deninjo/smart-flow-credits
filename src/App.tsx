@@ -9,6 +9,10 @@ import { Auth } from "./pages/Auth";
 import { Dashboard } from "./pages/Dashboard";
 import { Purchase } from "./pages/Purchase";
 import { AdminDashboard } from "./pages/AdminDashboard";
+import { AdminMeters } from "./pages/AdminMeters";
+import { AdminTransactions } from "./pages/AdminTransactions";
+import { AdminAlerts } from "./pages/AdminAlerts";
+import { AdminSettings } from "./pages/AdminSettings";
 import { Layout } from "./components/Layout";
 
 const queryClient = new QueryClient();
@@ -31,10 +35,10 @@ const App = () => (
           
           {/* Admin Routes */}
           <Route path="/admin" element={<Layout userType="admin"><AdminDashboard /></Layout>} />
-          <Route path="/admin/meters" element={<Layout userType="admin"><div>Meters Management (Coming Soon)</div></Layout>} />
-          <Route path="/admin/transactions" element={<Layout userType="admin"><div>Transactions (Coming Soon)</div></Layout>} />
-          <Route path="/admin/alerts" element={<Layout userType="admin"><div>System Alerts (Coming Soon)</div></Layout>} />
-          <Route path="/admin/settings" element={<Layout userType="admin"><div>Admin Settings (Coming Soon)</div></Layout>} />
+          <Route path="/admin/meters" element={<Layout userType="admin"><AdminMeters /></Layout>} />
+          <Route path="/admin/transactions" element={<Layout userType="admin"><AdminTransactions /></Layout>} />
+          <Route path="/admin/alerts" element={<Layout userType="admin"><AdminAlerts /></Layout>} />
+          <Route path="/admin/settings" element={<Layout userType="admin"><AdminSettings /></Layout>} />
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
