@@ -14,37 +14,40 @@ import { AdminTransactions } from "./pages/AdminTransactions";
 import { AdminAlerts } from "./pages/AdminAlerts";
 import { AdminSettings } from "./pages/AdminSettings";
 import { Layout } from "./components/Layout";
+import { AuthProvider } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/auth" element={<Auth />} />
-          
-          {/* Customer Routes */}
-          <Route path="/dashboard" element={<Layout userType="customer"><Dashboard /></Layout>} />
-          <Route path="/purchase" element={<Layout userType="customer"><Purchase /></Layout>} />
-          <Route path="/alerts" element={<Layout userType="customer"><div>Alerts Page (Coming Soon)</div></Layout>} />
-          <Route path="/settings" element={<Layout userType="customer"><div>Settings Page (Coming Soon)</div></Layout>} />
-          
-          {/* Admin Routes */}
-          <Route path="/admin" element={<Layout userType="admin"><AdminDashboard /></Layout>} />
-          <Route path="/admin/meters" element={<Layout userType="admin"><AdminMeters /></Layout>} />
-          <Route path="/admin/transactions" element={<Layout userType="admin"><AdminTransactions /></Layout>} />
-          <Route path="/admin/alerts" element={<Layout userType="admin"><AdminAlerts /></Layout>} />
-          <Route path="/admin/settings" element={<Layout userType="admin"><AdminSettings /></Layout>} />
-          
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            
+            {/* Customer Routes */}
+            <Route path="/dashboard" element={<Layout userType="customer"><Dashboard /></Layout>} />
+            <Route path="/purchase" element={<Layout userType="customer"><Purchase /></Layout>} />
+            <Route path="/alerts" element={<Layout userType="customer"><div>Alerts Page (Coming Soon)</div></Layout>} />
+            <Route path="/settings" element={<Layout userType="customer"><div>Settings Page (Coming Soon)</div></Layout>} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin" element={<Layout userType="admin"><AdminDashboard /></Layout>} />
+            <Route path="/admin/meters" element={<Layout userType="admin"><AdminMeters /></Layout>} />
+            <Route path="/admin/transactions" element={<Layout userType="admin"><AdminTransactions /></Layout>} />
+            <Route path="/admin/alerts" element={<Layout userType="admin"><AdminAlerts /></Layout>} />
+            <Route path="/admin/settings" element={<Layout userType="admin"><AdminSettings /></Layout>} />
+            
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
