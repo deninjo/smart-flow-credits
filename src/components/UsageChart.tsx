@@ -58,117 +58,123 @@ export const UsageChart = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-water">Weekly Usage Overview</CardTitle>
-          {selectedDay && (
-            <p className="text-sm text-muted-foreground">
-              {selectedDay}: {dailyUsageData.find(d => d.name === selectedDay)?.usage}L used, 
-              KSh {dailyUsageData.find(d => d.name === selectedDay)?.cost} cost
-            </p>
-          )}
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="h-[300px]">
-            <BarChart data={dailyUsageData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis 
-                dataKey="name" 
-                stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis 
-                stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-              />
-              <ChartTooltip 
-                content={<ChartTooltipContent 
-                  labelFormatter={(value) => `${value}`}
-                  formatter={(value, name) => [
-                    `${value}${name === 'usage' ? 'L' : ''}`,
-                    chartConfig[name as keyof typeof chartConfig]?.label || name
-                  ]}
-                />} 
-              />
-              <Bar 
-                dataKey="usage" 
-                radius={[4, 4, 0, 0]}
-                className="cursor-pointer transition-all duration-200 hover:opacity-80"
-                onClick={handleBarClick}
-              >
-                {dailyUsageData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={getBarColor(entry.name)} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="text-water">Weekly Usage Overview</CardTitle>
+            {selectedDay && (
+              <p className="text-sm text-muted-foreground">
+                {selectedDay}: {dailyUsageData.find(d => d.name === selectedDay)?.usage}L used, 
+                KSh {dailyUsageData.find(d => d.name === selectedDay)?.cost} cost
+              </p>
+            )}
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={chartConfig} className="h-[250px] md:h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={dailyUsageData} margin={{ top: 20, right: 10, bottom: 20, left: 10 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis 
+                    dataKey="name" 
+                    stroke="hsl(var(--muted-foreground))"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis 
+                    stroke="hsl(var(--muted-foreground))"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <ChartTooltip 
+                    content={<ChartTooltipContent 
+                      labelFormatter={(value) => `${value}`}
+                      formatter={(value, name) => [
+                        `${value}${name === 'usage' ? 'L' : ''}`,
+                        chartConfig[name as keyof typeof chartConfig]?.label || name
+                      ]}
+                    />} 
+                  />
+                  <Bar 
+                    dataKey="usage" 
+                    radius={[4, 4, 0, 0]}
+                    className="cursor-pointer transition-all duration-200 hover:opacity-80"
+                    onClick={handleBarClick}
+                  >
+                    {dailyUsageData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={getBarColor(entry.name)} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </CardContent>
+        </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-water">Today's Flow Rate</CardTitle>
-          {selectedTime && (
-            <p className="text-sm text-muted-foreground">
-              {selectedTime}: {hourlyUsageData.find(d => d.time === selectedTime)?.flow}L/h flow rate
-            </p>
-          )}
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="h-[300px]">
-            <LineChart data={hourlyUsageData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis 
-                dataKey="time" 
-                stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis 
-                stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-              />
-              <ChartTooltip 
-                content={<ChartTooltipContent 
-                  labelFormatter={(value) => `${value}`}
-                  formatter={(value, name) => [
-                    `${value}L/h`,
-                    chartConfig[name as keyof typeof chartConfig]?.label || name
-                  ]}
-                />} 
-              />
-              <Line 
-                type="monotone" 
-                dataKey="flow" 
-                stroke={selectedTime ? "hsl(var(--credit-primary))" : "hsl(var(--credit-primary))"}
-                strokeWidth={3}
-                dot={{ 
-                  fill: "hsl(var(--credit-primary))", 
-                  strokeWidth: 2, 
-                  r: 6,
-                  className: "cursor-pointer transition-all duration-200 hover:r-8"
-                }}
-                activeDot={{ 
-                  r: 8, 
-                  fill: "hsl(var(--credit-primary))",
-                  stroke: "hsl(var(--background))",
-                  strokeWidth: 2
-                }}
-                className="cursor-pointer"
-                onClick={handleLineClick}
-              />
-            </LineChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="text-water">Today's Flow Rate</CardTitle>
+            {selectedTime && (
+              <p className="text-sm text-muted-foreground">
+                {selectedTime}: {hourlyUsageData.find(d => d.time === selectedTime)?.flow}L/h flow rate
+              </p>
+            )}
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={chartConfig} className="h-[250px] md:h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={hourlyUsageData} margin={{ top: 20, right: 10, bottom: 20, left: 10 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis 
+                    dataKey="time" 
+                    stroke="hsl(var(--muted-foreground))"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis 
+                    stroke="hsl(var(--muted-foreground))"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <ChartTooltip 
+                    content={<ChartTooltipContent 
+                      labelFormatter={(value) => `${value}`}
+                      formatter={(value, name) => [
+                        `${value}L/h`,
+                        chartConfig[name as keyof typeof chartConfig]?.label || name
+                      ]}
+                    />} 
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="flow" 
+                    stroke={selectedTime ? "hsl(var(--credit-primary))" : "hsl(var(--credit-primary))"}
+                    strokeWidth={3}
+                    dot={{ 
+                      fill: "hsl(var(--credit-primary))", 
+                      strokeWidth: 2, 
+                      r: 6,
+                      className: "cursor-pointer transition-all duration-200 hover:r-8"
+                    }}
+                    activeDot={{ 
+                      r: 8, 
+                      fill: "hsl(var(--credit-primary))",
+                      stroke: "hsl(var(--background))",
+                      strokeWidth: 2
+                    }}
+                    className="cursor-pointer"
+                    onClick={handleLineClick}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

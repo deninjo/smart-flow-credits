@@ -43,7 +43,7 @@ export const Dashboard = () => {
       />
 
       {/* Alerts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
         <div className="lg:col-span-2">
           <Alert className="border-warning bg-warning-light">
             <AlertTriangle className="h-4 w-4 text-warning" />
@@ -77,7 +77,7 @@ export const Dashboard = () => {
       <UsageChart />
 
       {/* Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">

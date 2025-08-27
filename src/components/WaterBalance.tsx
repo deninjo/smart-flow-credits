@@ -15,7 +15,7 @@ export const WaterBalance = ({
   trend 
 }: WaterBalanceProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6">
       <Card className="bg-gradient-water text-white border-0 shadow-water">
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-white/90">
@@ -24,7 +24,7 @@ export const WaterBalance = ({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-bold">{currentUnits.toLocaleString()}L</div>
+          <div className="text-2xl md:text-3xl font-bold">{currentUnits.toLocaleString()}L</div>
           <p className="text-white/80 text-sm mt-1">
             Available water units
           </p>
@@ -36,7 +36,7 @@ export const WaterBalance = ({
           <CardTitle className="text-white/90">This Month Usage</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-bold">{lastMonthUsage.toLocaleString()}L</div>
+          <div className="text-2xl md:text-3xl font-bold">{lastMonthUsage.toLocaleString()}L</div>
           <div className="flex items-center gap-1 mt-1 text-white/80">
             {trend === 'up' ? (
               <TrendingUp className="h-4 w-4" />
@@ -55,7 +55,7 @@ export const WaterBalance = ({
           <CardTitle className="text-warning">Usage Status</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-warning">
+          <div className="text-xl md:text-2xl font-bold text-warning">
             {currentBalance < 500 ? 'Low Balance' : 'Normal'}
           </div>
           <p className="text-warning/80 text-sm mt-1">
