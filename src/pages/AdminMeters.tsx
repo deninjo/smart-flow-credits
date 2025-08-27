@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AddMeterModal } from "@/components/admin/AddMeterModal";
+import { MeterDetailsModal } from "@/components/admin/MeterDetailsModal";
 import { 
   Droplets, 
   MapPin, 
@@ -68,6 +71,19 @@ const meters = [
 ];
 
 export const AdminMeters = () => {
+  const [addMeterOpen, setAddMeterOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [selectedMeter, setSelectedMeter] = useState<typeof meters[0] | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleMeterAdded = () => {
+    setRefreshKey(prev => prev + 1);
+  };
+
+  const handleViewDetails = (meter: typeof meters[0]) => {
+    setSelectedMeter(meter);
+    setDetailsOpen(true);
+  };
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'active':
@@ -111,7 +127,7 @@ export const AdminMeters = () => {
             <MapPin className="h-4 w-4" />
             Map View
           </Button>
-          <Button variant="water" size="sm">
+          <Button variant="water" size="sm" onClick={() => setAddMeterOpen(true)}>
             <Droplets className="h-4 w-4" />
             Add Meter
           </Button>
@@ -178,10 +194,20 @@ export const AdminMeters = () => {
               </div>
 
               <div className="flex gap-2 pt-2">
-                <Button variant="outline" size="sm" className="flex-1">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => handleViewDetails(meter)}
+                >
                   View Details
                 </Button>
-                <Button variant="water" size="sm" className="flex-1">
+                <Button 
+                  variant="water" 
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => handleViewDetails(meter)}
+                >
                   Manage
                 </Button>
               </div>
@@ -189,6 +215,19 @@ export const AdminMeters = () => {
           </Card>
         ))}
       </div>
+
+      {/* Modals */}
+      <AddMeterModal 
+        open={addMeterOpen} 
+        onOpenChange={setAddMeterOpen}
+        onMeterAdded={handleMeterAdded}
+      />
+      
+      <MeterDetailsModal 
+        open={detailsOpen}
+        onOpenChange={setDetailsOpen}
+        meter={selectedMeter}
+      />
     </div>
   );
 };

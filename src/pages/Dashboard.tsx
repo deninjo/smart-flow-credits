@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { WaterBalance } from "@/components/WaterBalance";
 import { UsageChart } from "@/components/UsageChart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +15,8 @@ import {
 } from "lucide-react";
 
 export const Dashboard = () => {
+  const navigate = useNavigate();
+  
   // Simulated data
   const currentBalance = 1250;
   const currentUnits = 5000;
@@ -28,7 +31,7 @@ export const Dashboard = () => {
           <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
           <p className="text-muted-foreground">Monitor your water usage and balance</p>
         </div>
-        <Button variant="water" size="lg">
+        <Button variant="water" size="lg" onClick={() => navigate('/purchase')}>
           <CreditCard className="h-4 w-4" />
           Purchase Water
         </Button>

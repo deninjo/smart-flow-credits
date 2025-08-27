@@ -2,6 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { exportToCSV } from "@/utils/csvExport";
+import { toast } from "sonner";
 import { 
   Search,
   Filter,
@@ -67,6 +69,20 @@ const transactions = [
 ];
 
 export const AdminTransactions = () => {
+  const handleExport = () => {
+    const csvData = transactions.map(transaction => ({
+      id: transaction.id,
+      customer: transaction.customer,
+      amount: `KSh ${transaction.amount}`,
+      liters: `${transaction.liters}L`,
+      status: transaction.status,
+      date: transaction.timestamp,
+      paymentMethod: transaction.method
+    }));
+    
+    exportToCSV(csvData, 'water_transactions');
+    toast.success("Transactions exported successfully!");
+  };
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
@@ -102,7 +118,7 @@ export const AdminTransactions = () => {
           <p className="text-muted-foreground">Monitor all water purchase transactions</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={handleExport}>
             <Download className="h-4 w-4" />
             Export
           </Button>
