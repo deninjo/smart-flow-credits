@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { 
   Droplets, 
   LayoutDashboard, 
@@ -11,6 +12,9 @@ import {
   Menu,
   X
 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface LayoutProps {
   userType?: 'customer' | 'admin';
@@ -19,7 +23,11 @@ interface LayoutProps {
 
 export const Layout = ({ userType = 'customer', children }: LayoutProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [alertCount, setAlertCount] = useState(0);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { toast } = useToast();
 
   const customerNavItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
@@ -39,6 +47,57 @@ export const Layout = ({ userType = 'customer', children }: LayoutProps) => {
   const navItems = userType === 'admin' ? adminNavItems : customerNavItems;
 
   const isActivePath = (path: string) => location.pathname === path;
+
+  // Fetch alert count for customer portal
+  useEffect(() => {
+    if (userType === 'customer') {
+      fetchAlertCount();
+    }
+  }, [userType]);
+
+  const fetchAlertCount = async () => {
+    try {
+      const { count, error } = await supabase
+        .from('alerts')
+        .select('*', { count: 'exact', head: true })
+        .eq('acknowledged', false);
+
+      if (error) {
+        console.error('Error fetching alert count:', error);
+      } else {
+        setAlertCount(count || 0);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Failed to log out. Please try again.",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Logged out",
+          description: "You have been successfully logged out.",
+          variant: "default"
+        });
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to log out. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -68,10 +127,23 @@ export const Layout = ({ userType = 'customer', children }: LayoutProps) => {
             <span className="text-sm text-muted-foreground hidden sm:block">
               {userType === 'admin' ? 'Admin Portal' : 'Customer Portal'}
             </span>
-            <Button variant="ghost" size="icon">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => navigate(userType === 'admin' ? '/admin/alerts' : '/alerts')}
+              className="relative"
+            >
               <Bell className="h-5 w-5" />
+              {userType === 'customer' && alertCount > 0 && (
+                <Badge 
+                  variant="destructive" 
+                  className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center text-xs p-0 animate-pulse"
+                >
+                  {alertCount > 9 ? '9+' : alertCount}
+                </Badge>
+              )}
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" onClick={handleLogout}>
               <LogOut className="h-5 w-5" />
             </Button>
           </div>

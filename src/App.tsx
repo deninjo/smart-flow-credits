@@ -13,6 +13,8 @@ import { AdminMeters } from "./pages/AdminMeters";
 import { AdminTransactions } from "./pages/AdminTransactions";
 import { AdminAlerts } from "./pages/AdminAlerts";
 import { AdminSettings } from "./pages/AdminSettings";
+import { CustomerAlerts } from "./pages/CustomerAlerts";
+import { CustomerSettings } from "./pages/CustomerSettings";
 import { Layout } from "./components/Layout";
 import { AuthProvider } from "./hooks/useAuth";
 
@@ -32,8 +34,8 @@ const App = () => (
             {/* Customer Routes */}
             <Route path="/dashboard" element={<Layout userType="customer"><Dashboard /></Layout>} />
             <Route path="/purchase" element={<Layout userType="customer"><Purchase /></Layout>} />
-            <Route path="/alerts" element={<Layout userType="customer"><div>Alerts Page (Coming Soon)</div></Layout>} />
-            <Route path="/settings" element={<Layout userType="customer"><div>Settings Page (Coming Soon)</div></Layout>} />
+            <Route path="/alerts" element={<Layout userType="customer"><CustomerAlerts /></Layout>} />
+            <Route path="/settings" element={<Layout userType="customer"><CustomerSettings /></Layout>} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<Layout userType="admin"><AdminDashboard /></Layout>} />
