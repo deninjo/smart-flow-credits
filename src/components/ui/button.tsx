@@ -26,10 +26,11 @@ const buttonVariants = cva(
         "credit-outline": "border-2 border-credit text-credit bg-credit-light hover:bg-credit hover:text-white transition-all",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        default: "h-10 px-4 py-2 text-sm",
+        sm: "h-8 px-3 py-1 text-xs sm:h-9 sm:px-3 sm:text-sm",
+        lg: "h-10 px-6 py-2 text-sm sm:h-11 sm:px-8 sm:text-base",
+        icon: "h-8 w-8 sm:h-10 sm:w-10",
+        responsive: "h-11 px-4 py-2 text-sm sm:h-12 sm:px-6 md:h-14 md:px-8 md:text-base",
       },
     },
     defaultVariants: {

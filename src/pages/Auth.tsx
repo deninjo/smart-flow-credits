@@ -77,6 +77,7 @@ export const Auth = () => {
                   <Button 
                     type="submit" 
                     variant="water" 
+                    size="responsive"
                     className="w-full" 
                     disabled={isLoading}
                   >
@@ -96,7 +97,7 @@ export const Auth = () => {
 
               <TabsContent value="register">
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="firstName">First Name</Label>
                       <div className="relative">
@@ -177,6 +178,7 @@ export const Auth = () => {
                   <Button 
                     type="submit" 
                     variant="water" 
+                    size="responsive"
                     className="w-full" 
                     disabled={isLoading}
                   >
