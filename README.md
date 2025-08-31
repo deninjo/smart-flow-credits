@@ -31,7 +31,7 @@ AquaFlow is a modern web application designed to streamline water utility manage
 
 ## 🚀 Live Demo
 
-**URL**: https://lovable.dev/projects/c530a6ae-5d24-4807-9f0e-7b5b68cb4967
+**URL**: https://smart-flow-credits.lovable.app/
 
 ## What technologies are used for this project?
 
