@@ -11,7 +11,8 @@ import {
   MapPin,
   Zap
 } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Tooltip, Legend } from 'recharts';
+import { useState } from 'react';
 
 // Simulated data
 const systemOverview = {
@@ -44,6 +45,46 @@ const recentAlerts = [
 ];
 
 export const AdminDashboard = () => {
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
+  const [selectedMeterStatus, setSelectedMeterStatus] = useState<string | null>(null);
+
+  const handleLineClick = (data: any) => {
+    setSelectedMonth(selectedMonth === data.name ? null : data.name);
+  };
+
+  const handlePieClick = (data: any) => {
+    setSelectedMeterStatus(selectedMeterStatus === data.name ? null : data.name);
+  };
+
+  const getDetailedRevenueInfo = (month: string) => {
+    const monthData = revenueData.find(item => item.name === month);
+    if (!monthData) return null;
+    
+    return {
+      revenue: monthData.revenue,
+      customers: Math.floor(monthData.revenue / 366), // Estimated customers
+      avgPerCustomer: Math.round(monthData.revenue / Math.floor(monthData.revenue / 366)),
+      growth: month === 'Jun' ? '+12.7%' : month === 'May' ? '+8.2%' : '+5.1%'
+    };
+  };
+
+  const getDetailedMeterInfo = (status: string) => {
+    const statusData = meterStatusData.find(item => item.name === status);
+    if (!statusData) return null;
+    
+    const details = {
+      'Active': { description: 'Meters operating normally', action: 'Monitor usage patterns' },
+      'Low Balance': { description: 'Meters with balance < 100 units', action: 'Send payment reminders' },
+      'Offline': { description: 'Meters not responding', action: 'Schedule maintenance visit' }
+    };
+    
+    return {
+      count: statusData.value,
+      percentage: ((statusData.value / meterStatusData.reduce((sum, item) => sum + item.value, 0)) * 100).toFixed(1),
+      ...details[status as keyof typeof details]
+    };
+  };
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -134,19 +175,68 @@ export const AdminDashboard = () => {
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={revenueData}>
+              <LineChart data={revenueData} onClick={handleLineClick}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} />
                 <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: 'hsl(var(--background))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '8px',
+                    color: 'hsl(var(--foreground))'
+                  }}
+                  formatter={(value: any) => [`KSh ${value.toLocaleString()}`, 'Revenue']}
+                />
                 <Line 
                   type="monotone" 
                   dataKey="revenue" 
                   stroke="hsl(var(--water-primary))" 
                   strokeWidth={3}
-                  dot={{ fill: "hsl(var(--water-primary))", strokeWidth: 2, r: 4 }}
+                  dot={{ 
+                    fill: "hsl(var(--water-primary))", 
+                    strokeWidth: 2, 
+                    r: 6,
+                    cursor: 'pointer'
+                  }}
+                  activeDot={{ 
+                    r: 8, 
+                    fill: "hsl(var(--water-primary))",
+                    stroke: "hsl(var(--background))",
+                    strokeWidth: 2
+                  }}
                 />
               </LineChart>
             </ResponsiveContainer>
+            
+            {selectedMonth && (
+              <div className="mt-4 p-4 bg-muted rounded-lg">
+                <h4 className="font-medium text-water mb-2">{selectedMonth} Details</h4>
+                {(() => {
+                  const details = getDetailedRevenueInfo(selectedMonth);
+                  return details ? (
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="text-muted-foreground">Revenue:</span>
+                        <p className="font-medium">KSh {details.revenue.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Growth:</span>
+                        <p className="font-medium text-credit">{details.growth}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Active Customers:</span>
+                        <p className="font-medium">{details.customers}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Avg per Customer:</span>
+                        <p className="font-medium">KSh {details.avgPerCustomer}</p>
+                      </div>
+                    </div>
+                  ) : null;
+                })()}
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -169,13 +259,55 @@ export const AdminDashboard = () => {
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
+                  onClick={handlePieClick}
+                  style={{ cursor: 'pointer' }}
                 >
                   {meterStatusData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={entry.color}
+                      stroke={selectedMeterStatus === entry.name ? "hsl(var(--foreground))" : "none"}
+                      strokeWidth={selectedMeterStatus === entry.name ? 3 : 0}
+                    />
                   ))}
                 </Pie>
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: 'hsl(var(--background))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '8px',
+                    color: 'hsl(var(--foreground))'
+                  }}
+                  formatter={(value: any) => [`${value} meters`, 'Count']}
+                />
+                <Legend />
               </PieChart>
             </ResponsiveContainer>
+            
+            {selectedMeterStatus && (
+              <div className="mt-4 p-4 bg-muted rounded-lg">
+                <h4 className="font-medium text-water mb-2">{selectedMeterStatus} Meters</h4>
+                {(() => {
+                  const details = getDetailedMeterInfo(selectedMeterStatus);
+                  return details ? (
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Count:</span>
+                        <span className="font-medium">{details.count} ({details.percentage}%)</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Status:</span>
+                        <span className="font-medium">{details.description}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Recommended Action:</span>
+                        <span className="font-medium text-water">{details.action}</span>
+                      </div>
+                    </div>
+                  ) : null;
+                })()}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
