@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { MapPin, Droplets, Clock, AlertTriangle, CheckCircle, XCircle, Activity } from "lucide-react";
+import { MapPin, Droplets, Clock, AlertTriangle, CheckCircle, XCircle, Activity, Power, PowerOff } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Meter {
   id: string;
@@ -13,6 +15,7 @@ interface Meter {
   status: string;
   lastReading: string;
   dailyUsage: number;
+  valveStatus: "open" | "closed";
 }
 
 interface MeterDetailsModalProps {
@@ -22,7 +25,28 @@ interface MeterDetailsModalProps {
 }
 
 export const MeterDetailsModal = ({ open, onOpenChange, meter }: MeterDetailsModalProps) => {
+  const { toast } = useToast();
+  const [valveStatus, setValveStatus] = useState(meter?.valveStatus || "open");
+  
   if (!meter) return null;
+
+  const handleValveControl = async (action: "open" | "close") => {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setValveStatus(action === "open" ? "open" : "closed");
+      toast({
+        title: `Valve ${action === "open" ? "Opened" : "Closed"}`,
+        description: `Water valve for meter ${meter.id} has been ${action === "open" ? "opened" : "closed"} successfully.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: `Failed to ${action} valve. Please try again.`,
+        variant: "destructive",
+      });
+    }
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -113,6 +137,52 @@ export const MeterDetailsModal = ({ open, onOpenChange, meter }: MeterDetailsMod
                   </div>
                   <span className="text-lg font-bold">{meter.dailyUsage}L</span>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Valve Control */}
+          <div>
+            <h3 className="font-semibold mb-3">Valve Control</h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {valveStatus === "open" ? (
+                    <Power className="h-4 w-4 text-credit" />
+                  ) : (
+                    <PowerOff className="h-4 w-4 text-danger" />
+                  )}
+                  <span className="text-muted-foreground">Valve Status:</span>
+                </div>
+                <Badge className={valveStatus === "open" ? "bg-credit-light text-credit" : "bg-danger-light text-danger"}>
+                  {valveStatus === "open" ? "Open" : "Closed"}
+                </Badge>
+              </div>
+              
+              <div className="flex gap-2">
+                {valveStatus === "open" ? (
+                  <Button 
+                    variant="destructive" 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={() => handleValveControl("close")}
+                  >
+                    <PowerOff className="h-4 w-4 mr-2" />
+                    Close Valve
+                  </Button>
+                ) : (
+                  <Button 
+                    variant="water" 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={() => handleValveControl("open")}
+                  >
+                    <Power className="h-4 w-4 mr-2" />
+                    Open Valve
+                  </Button>
+                )}
               </div>
             </div>
           </div>

@@ -26,7 +26,8 @@ const meters = [
     liters: 1200, 
     status: "active",
     lastReading: "2024-01-20 14:30",
-    dailyUsage: 45
+    dailyUsage: 45,
+    valveStatus: "open" as const
   },
   { 
     id: "AQ-002", 
@@ -36,7 +37,8 @@ const meters = [
     liters: 75, 
     status: "low_balance",
     lastReading: "2024-01-20 14:25",
-    dailyUsage: 38
+    dailyUsage: 38,
+    valveStatus: "open" as const
   },
   { 
     id: "AQ-003", 
@@ -46,7 +48,8 @@ const meters = [
     liters: 0, 
     status: "offline",
     lastReading: "2024-01-19 09:15",
-    dailyUsage: 0
+    dailyUsage: 0,
+    valveStatus: "closed" as const
   },
   { 
     id: "AQ-004", 
@@ -56,7 +59,8 @@ const meters = [
     liters: 1600, 
     status: "active",
     lastReading: "2024-01-20 14:32",
-    dailyUsage: 52
+    dailyUsage: 52,
+    valveStatus: "open" as const
   },
   { 
     id: "AQ-005", 
@@ -66,7 +70,8 @@ const meters = [
     liters: 400, 
     status: "leak_detected",
     lastReading: "2024-01-20 14:28",
-    dailyUsage: 125
+    dailyUsage: 125,
+    valveStatus: "closed" as const
   }
 ];
 
