@@ -5,19 +5,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   CreditCard, 
   Smartphone, 
   Droplets, 
   Calculator,
   CheckCircle,
-  Clock
+  Clock,
+  Construction,
+  Wrench
 } from "lucide-react";
 
 export const Purchase = () => {
   const [amount, setAmount] = useState("");
   const [selectedMethod, setSelectedMethod] = useState<"mpesa" | "card" | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showConstructionModal, setShowConstructionModal] = useState(false);
   
   const waterRate = 0.25; // KSh per liter
   const litersFromAmount = amount ? Math.floor(Number(amount) / waterRate) : 0;
@@ -27,12 +31,8 @@ export const Purchase = () => {
   const handlePurchase = async () => {
     if (!amount || !selectedMethod) return;
     
-    setIsProcessing(true);
-    // Simulate payment processing
-    setTimeout(() => {
-      setIsProcessing(false);
-      // In real app, this would redirect to payment gateway
-    }, 2000);
+    // Show construction modal
+    setShowConstructionModal(true);
   };
 
   return (
@@ -229,6 +229,38 @@ export const Purchase = () => {
           </Card>
         </div>
       </div>
+
+      {/* Construction Modal */}
+      <Dialog open={showConstructionModal} onOpenChange={setShowConstructionModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-3 text-center justify-center">
+              <div className="h-12 w-12 bg-warning-light rounded-full flex items-center justify-center">
+                <Construction className="h-6 w-6 text-warning animate-bounce" />
+              </div>
+              <span className="text-xl">Payment Integration</span>
+            </DialogTitle>
+          </DialogHeader>
+          <div className="text-center py-6 space-y-4">
+            <div className="flex justify-center gap-4 mb-4">
+              <Wrench className="h-8 w-8 text-muted-foreground animate-pulse" />
+              <Construction className="h-8 w-8 text-warning animate-bounce" />
+              <Wrench className="h-8 w-8 text-muted-foreground animate-pulse" />
+            </div>
+            <h3 className="text-lg font-semibold text-foreground">Under Construction</h3>
+            <p className="text-muted-foreground">
+              Payment integration is currently being implemented. This feature will be available soon with M-Pesa and card payment options.
+            </p>
+            <Button 
+              onClick={() => setShowConstructionModal(false)}
+              variant="water"
+              className="mt-4"
+            >
+              Got it, thanks!
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

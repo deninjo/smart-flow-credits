@@ -125,7 +125,10 @@ export const Layout = ({ userType = 'customer', children }: LayoutProps) => {
 
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground hidden sm:block">
-              {userType === 'admin' ? 'Admin Portal' : 'Customer Portal'}
+              {userType === 'admin' ? 'Admin Portal' : 
+                (location.pathname === '/dashboard' && !user) ? 'Demo Customer Portal' :
+                user ? `Welcome, ${user.email?.split('@')[0] || 'Customer'}` : 'Customer Portal'
+              }
             </span>
             <Button 
               variant="ghost" 

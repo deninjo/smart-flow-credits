@@ -80,7 +80,7 @@ const Index = () => {
               </Button>
               <Button asChild variant="water-outline" size="lg" className="border-white text-white hover:bg-white hover:text-water">
                 <Link to="/admin">
-                  Admin Portal
+                  Admin Portal Demo
                 </Link>
               </Button>
             </div>
