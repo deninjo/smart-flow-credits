@@ -152,6 +152,17 @@ export const Dashboard = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Dummy Data Notice */}
+      <div className="mt-8">
+        <Alert className="border-warning-light bg-warning-light/10">
+          <AlertTriangle className="h-4 w-4 text-warning" />
+          <AlertDescription className="text-sm text-muted-foreground">
+            <strong>Note:</strong> This dashboard currently displays dummy data for demonstration purposes. 
+            Real-time water consumption data will be available once IoT meter integration is implemented.
+          </AlertDescription>
+        </Alert>
+      </div>
     </div>
   );
 };
